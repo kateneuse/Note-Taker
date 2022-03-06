@@ -1,13 +1,13 @@
-const note = require('express').Router();
+const nts = require('express').Router();
 const { v4: uuidv4 } = require('uuid');
-const { readAndAppend, readFromFile, readAndRemove } = require('../helpers/helpers')
+const { readAndAppend, readFromFile, readAndRemove } = require('../helpers/fsUtils.js')
 
-note.get('/', (req, res) =>
+nts.get('/', (req, res) =>
     readFromFile('./db/db.json').then((data) =>
     res.json(JSON.parse(data)))
 );
 
-note.post('/', (req, res) => {
+nts.post('/', (req, res) => {
     const { title, text } = req.body
     if (title && text) {
         const newNote = {
@@ -28,7 +28,7 @@ note.post('/', (req, res) => {
         }
 })
 
-note.delete('/:id', (req, res) => {
+nts.delete('/:id', (req, res) => {
     const removeId = req.params.id;
     if (removeId) {
         readAndRemove(removeId, './db/db.json');
@@ -43,4 +43,4 @@ note.delete('/:id', (req, res) => {
     }
 })
 
-module.exports = note;
+module.exports = nts;
